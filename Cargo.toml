@@ -22,5 +22,8 @@ tower-sessions = "0.12.3"
 tower-sessions-redis-store = "0.13.0"
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
+utoipa = "5.3.1"
+utoipa-axum = "0.2.0"
+utoipa-swagger-ui = "9.0.0"
 uuid = { version = "1.10.0", features = ["serde", "v4"] }
 validator = { version = "0.18.1", features = ["derive"] }
