@@ -14,6 +14,7 @@ use axum::{
     Router,
 };
 use std::sync::Arc;
+
 async fn handle_invalid_path() -> impl IntoResponse {
     (
         StatusCode::NOT_FOUND,
@@ -28,29 +29,19 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
         .route("/posts", post(post_handlers::create_post))
         .route("/posts/:post_id", delete(post_handlers::delete_post))
         .route("/posts/:post_id/react", post(post_handlers::react_to_post))
+        .route("/posts/:post_id/comments",post(comment_handlers::create_comment_handler))
         .route("/auth/logout", post(auth_handlers::logout_handler))
         .route("/auth/status", post(auth_handlers::status_handler))
-        .route(
-            "/posts/:post_id/comments",
-            post(comment_handlers::create_comment_handler),
-        )
-        .route(
-            "/profile/upload",
-            post(profile_handlers::upload_profile_pic),
-        );
+        .route("/profile/upload",post(profile_handlers::upload_profile_pic));
 
     // Define the unprotected routes
     let unprotected_routes = Router::new()
-        .route("/user/:username", get(profile_handlers::get_profile))
         .route("/users", get(user_handlers::get_all_users))
-        .route("/posts", get(post_handlers::get_all_posts))
+        .route("/user/:username", get(profile_handlers::get_profile))
         .route("/auth/login", post(auth_handlers::login_handler))
         .route("/auth/register", post(auth_handlers::register_handler))
-        .route(
-            "/posts/:post_id/comments",
-            get(comment_handlers::get_comments_handler),
-        )
-        .fallback(handle_invalid_path)
+        .route("/posts", get(post_handlers::get_all_posts))
+        .route("/posts/:post_id/comments",get(comment_handlers::get_comments_handler)).fallback(handle_invalid_path)
         .route("/posts/:post_id", get(post_handlers::get_post));
 
     // Apply the middleware layer to protected routes

@@ -1,7 +1,7 @@
 use crate::{
     model::{PostResponse, UserModel},
     response::{AppError, AppJson, AppPath, JsendResponse},
-    schema::{CreatePostSchema, LikePostSchema},
+    schema::{PostSchema, ReactPostSchema},
     AppState,
 };
 use axum::{extract::State, response::IntoResponse, Extension, Json};
@@ -86,7 +86,7 @@ pub async fn react_to_post(
     State(data): State<Arc<AppState>>,
     Extension(user): Extension<UserModel>,
     AppPath(postid): AppPath<String>,
-    AppJson(is_like): AppJson<LikePostSchema>,
+    AppJson(is_like): AppJson<ReactPostSchema>,
 ) -> Result<impl IntoResponse, AppError> {
     is_like.validate()?;
     let post_id = Uuid::parse_str(&postid)
@@ -179,7 +179,7 @@ pub async fn get_all_posts(
 pub async fn create_post(
     Extension(user): Extension<UserModel>,
     State(data): State<Arc<AppState>>,
-    AppJson(post): AppJson<CreatePostSchema>,
+    AppJson(post): AppJson<PostSchema>,
 ) -> Result<impl IntoResponse, AppError> {
     post.validate()?;
     sqlx::query!(

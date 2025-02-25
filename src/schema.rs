@@ -29,7 +29,7 @@ pub struct LoginUserSchema {
 }
 
 #[derive(Debug, Deserialize, Validate)]
-pub struct CreatePostSchema {
+pub struct PostSchema {
     #[serde(default)]
     #[validate(custom(function = "validate_title_length"))]
     pub title: String,
@@ -46,7 +46,7 @@ pub struct CommentSchema {
 }
 
 #[derive(Debug, Deserialize, Validate)]
-pub struct LikePostSchema {
+pub struct ReactPostSchema {
     #[serde(default)]
     pub is_like: bool,
 }
